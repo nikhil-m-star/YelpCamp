@@ -1,17 +1,11 @@
-console.log("DEBUG: Home.jsx loaded");
 import { Link } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useUser } from '@clerk/clerk-react';
 
 export default function Home() {
     const { user: localUser } = useContext(AuthContext);
-    const { isSignedIn, isLoaded, user } = useUser();
-
-    useEffect(() => {
-        console.log("DEBUG: Auth State", { localUser, isSignedIn, isLoaded, user });
-    }, [localUser, isSignedIn, isLoaded, user]);
-
+    const { isSignedIn, isLoaded } = useUser();
     const isLoggedIn = !!localUser || (isLoaded && isSignedIn);
 
     return (
@@ -40,7 +34,6 @@ export default function Home() {
                     )}
                 </div>
             </div>
-            <div style={{ position: 'fixed', bottom: 10, right: 10, background: 'rgba(255,0,0,0.8)', color: 'white', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', zIndex: 9999 }}>v1.1</div>
         </div>
     );
 }
