@@ -161,12 +161,10 @@ app.delete('/api/campgrounds/:id/reviews/:reviewId', isLoggedIn, async (req, res
     res.json({ message: "Deleted" });
 });
 
-// Start server only in local dev (not on Vercel)
-if (process.env.NODE_ENV !== 'production') {
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-        console.log(`Server running at port ${port}`);
-    });
-}
+// Start server
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server running at port ${port}`);
+});
 
 module.exports = app;
