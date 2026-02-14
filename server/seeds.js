@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const Campground = require('./Models/campground');
 const User = require('./Models/user');
 const bcrypt = require('bcryptjs');
+require('dotenv').config();
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp');
+mongoose.connect(process.env.dbUrl || 'mongodb://localhost:27017/yelp-camp');
 
 const seedData = [
     {
