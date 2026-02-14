@@ -17,7 +17,7 @@ export default function Register() {
         try {
             const res = await axios.post(`${API}/api/register`, { username, email, password });
             login(res.data.token, res.data.user);
-            navigate('/campgrounds');
+            navigate('/');
         } catch (e) {
             console.error("Registration failed", e);
             alert("Registration failed! Username might be taken.");

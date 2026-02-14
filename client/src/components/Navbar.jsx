@@ -71,9 +71,9 @@ export default function Navbar() {
             {isOpen && (
                 <div className="mobile-menu">
                     <div className="mobile-nav-links">
-                        <Link to="/" className="mobile-link">Home</Link>
-                        <Link to="/campgrounds" className="mobile-link">Campgrounds</Link>
-                        <Link to="/campgrounds/new" className="mobile-link">New Campground</Link>
+                        <Link to="/" className="mobile-link" onClick={() => setIsOpen(false)}>Home</Link>
+                        <Link to="/campgrounds" className="mobile-link" onClick={() => setIsOpen(false)}>Campgrounds</Link>
+                        <Link to="/campgrounds/new" className="mobile-link" onClick={() => setIsOpen(false)}>New Campground</Link>
                     </div>
                     <div className="mobile-auth">
                         <SignedIn>
@@ -93,8 +93,8 @@ export default function Navbar() {
                                 </div>
                             ) : (
                                 <div className="mobile-auth-links">
-                                    <Link to="/login" className="mobile-link">Login</Link>
-                                    <Link to="/register" className="btn btn-primary">Register</Link>
+                                    <Link to="/login" className="mobile-link" onClick={() => setIsOpen(false)}>Login</Link>
+                                    <Link to="/register" className="btn btn-primary" onClick={() => setIsOpen(false)}>Register</Link>
                                 </div>
                             )}
                         </SignedOut>

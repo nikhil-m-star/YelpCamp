@@ -16,7 +16,7 @@ export default function Login() {
         try {
             const res = await axios.post(`${API}/api/login`, { username, password });
             login(res.data.token, res.data.user);
-            navigate('/campgrounds');
+            navigate('/');
         } catch (e) {
             console.error("Login failed", e);
             alert("Login failed! Check credentials.");
