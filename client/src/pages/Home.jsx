@@ -5,8 +5,8 @@ import { useUser } from '@clerk/clerk-react';
 
 export default function Home() {
     const { user: localUser } = useContext(AuthContext);
-    const { user: clerkUser } = useUser();
-    const isLoggedIn = !!localUser || !!clerkUser;
+    const { isSignedIn, isLoaded } = useUser();
+    const isLoggedIn = !!localUser || (isLoaded && isSignedIn);
 
     return (
         <div className="home-hero">

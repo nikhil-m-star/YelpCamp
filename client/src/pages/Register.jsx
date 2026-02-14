@@ -1,16 +1,23 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { SignUpButton, SignedOut } from '@clerk/clerk-react';
+import { SignUpButton, SignedOut, useUser } from '@clerk/clerk-react';
 import API from '../api';
 
 export default function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useContext(AuthContext);
+    const { login, user: localUser } = useContext(AuthContext);
+    const { isSignedIn, isLoaded } = useUser();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localUser || (isLoaded && isSignedIn)) {
+            navigate('/');
+        }
+    }, [localUser, isSignedIn, isLoaded, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
