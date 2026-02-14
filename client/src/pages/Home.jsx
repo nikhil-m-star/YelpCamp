@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { useUser } from '@clerk/clerk-react';
 
 export default function Home() {
+    const { user: localUser } = useContext(AuthContext);
+    const { user: clerkUser } = useUser();
+    const isLoggedIn = !!localUser || !!clerkUser;
+
     return (
         <div className="home-hero">
             <div className="hero-content">
@@ -16,9 +23,15 @@ export default function Home() {
                     <Link to="/campgrounds" className="btn btn-primary">
                         Explore Collection
                     </Link>
-                    <Link to="/register" className="btn btn-secondary">
-                        Join Membership
-                    </Link>
+                    {isLoggedIn ? (
+                        <Link to="/campgrounds/new" className="btn btn-secondary">
+                            New Campground
+                        </Link>
+                    ) : (
+                        <Link to="/register" className="btn btn-secondary">
+                            Join Membership
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>
