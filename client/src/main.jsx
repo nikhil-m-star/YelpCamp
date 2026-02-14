@@ -48,6 +48,8 @@ createRoot(document.getElementById('root')).render(
       <ClerkProvider
         publishableKey={PUBLISHABLE_KEY}
         afterSignOutUrl="/"
+        afterSignInUrl="/"
+        afterSignUpUrl="/"
         appearance={{
           variables: {
             colorBackground: '#111111',
