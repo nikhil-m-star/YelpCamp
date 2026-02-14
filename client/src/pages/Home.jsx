@@ -39,9 +39,8 @@ export default function Home() {
                         </Link>
                     )}
                 </div>
-                </div>
             </div>
             <div style={{ position: 'fixed', bottom: 10, right: 10, background: 'rgba(255,0,0,0.8)', color: 'white', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', zIndex: 9999 }}>v1.1</div>
-        </div >
+        </div>
     );
 }
