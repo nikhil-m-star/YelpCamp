@@ -77,7 +77,7 @@ const seedData = [
         description: 'Premium backcountry camping overlooking a glacial fjord. Remote and pristine, this site requires a 3-mile hike in but rewards you with views that will take your breath away.',
         location: 'Olympic National Park, Washington',
         geometry: { type: 'Point', coordinates: [-123.4979, 47.8021] },
-        image: [{ url: 'https://images.unsplash.com/photo-1487730116445-4e1b8a899d78?w=800', filename: 'camp9' }]
+        image: [{ url: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800', filename: 'camp9' }]
     }
 ];
 
