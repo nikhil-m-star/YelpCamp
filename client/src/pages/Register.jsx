@@ -3,6 +3,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { SignUpButton, SignedOut } from '@clerk/clerk-react';
+import API from '../api';
 
 export default function Register() {
     const [username, setUsername] = useState('');
@@ -14,7 +15,7 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:3000/register', { username, email, password });
+            const res = await axios.post(`${API}/api/register`, { username, email, password });
             login(res.data.token, res.data.user);
             navigate('/campgrounds');
         } catch (e) {

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { useAuth } from '@clerk/clerk-react';
+import API from '../api';
 
 export default function CampgroundNew() {
     const [title, setTitle] = useState('');
@@ -31,7 +32,7 @@ export default function CampgroundNew() {
             token = await getToken();
         }
 
-        const res = await axios.post('http://localhost:3000/campgrounds', formData, {
+        const res = await axios.post(`${API}/api/campgrounds`, formData, {
             headers: { Authorization: `Bearer ${token}` }
         });
         navigate(`/campgrounds/${res.data._id}`);

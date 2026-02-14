@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useAuth } from '@clerk/clerk-react';
+import API from '../api';
 
 export default function CampgroundEdit() {
     const { id } = useParams();
@@ -14,7 +15,7 @@ export default function CampgroundEdit() {
 
     useEffect(() => {
         const fetchCamp = async () => {
-            const res = await axios.get(`http://localhost:3000/campgrounds/${id}`);
+            const res = await axios.get(`${API}/api/campgrounds/${id}`);
             setTitle(res.data.title);
             setLocation(res.data.location);
         }
@@ -28,7 +29,7 @@ export default function CampgroundEdit() {
             token = await getToken();
         }
         const updatedCamp = { campground: { title, location } };
-        await axios.put(`http://localhost:3000/campgrounds/${id}`, updatedCamp, {
+        await axios.put(`${API}/api/campgrounds/${id}`, updatedCamp, {
             headers: { Authorization: `Bearer ${token}` }
         });
         navigate(`/campgrounds/${id}`);

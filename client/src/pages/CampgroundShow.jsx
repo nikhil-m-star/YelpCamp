@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useUser, useAuth } from '@clerk/clerk-react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import API from '../api';
 
 function StarRating({ value, onChange }) {
     const [hover, setHover] = useState(0);
@@ -40,7 +41,7 @@ export default function CampgroundShow() {
 
     useEffect(() => {
         const fetchCamp = async () => {
-            const res = await axios.get(`http://localhost:3000/campgrounds/${id}`);
+            const res = await axios.get(`${API}/api/campgrounds/${id}`);
             setCampground(res.data);
         };
         fetchCamp();
@@ -53,7 +54,7 @@ export default function CampgroundShow() {
 
     const handleDelete = async () => {
         const token = await getAuthToken();
-        await axios.delete(`http://localhost:3000/campgrounds/${id}`, {
+        await axios.delete(`${API}/api/campgrounds/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         navigate('/campgrounds');
@@ -140,7 +141,7 @@ export default function CampgroundShow() {
                                     {isReviewAuthor && (
                                         <button onClick={async () => {
                                             const token = await getAuthToken();
-                                            await axios.delete(`http://localhost:3000/campgrounds/${id}/reviews/${rev._id}`, {
+                                            await axios.delete(`${API}/api/campgrounds/${id}/reviews/${rev._id}`, {
                                                 headers: { Authorization: `Bearer ${token}` }
                                             });
                                             navigate(0);
@@ -176,7 +177,7 @@ export default function CampgroundShow() {
                             e.preventDefault();
                             const body = e.target.body.value;
                             const token = await getAuthToken();
-                            await axios.post(`http://localhost:3000/campgrounds/${id}/reviews`, { review: { body, rating } }, {
+                            await axios.post(`${API}/api/campgrounds/${id}/reviews`, { review: { body, rating } }, {
                                 headers: { Authorization: `Bearer ${token}` }
                             });
                             navigate(0);

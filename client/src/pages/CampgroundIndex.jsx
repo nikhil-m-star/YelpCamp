@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import API from '../api';
 
 export default function CampgroundIndex() {
     const [campgrounds, setCampgrounds] = useState([]);
 
     useEffect(() => {
         const fetchCampgrounds = async () => {
-            const res = await axios.get('http://localhost:3000/campgrounds');
+            const res = await axios.get(`${API}/api/campgrounds`);
             setCampgrounds(res.data);
         };
         fetchCampgrounds();
