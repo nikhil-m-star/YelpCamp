@@ -4,10 +4,12 @@ import { useContext, useState } from 'react';
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
 export default function Navbar() {
+    // Access custom auth context for legacy/local auth
     const { user, logout } = useContext(AuthContext);
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false); // Mobile menu state
     const location = useLocation();
 
+    // Helper to highlight active link based on current path
     const getLinkClass = (path) => {
         return location.pathname === path ? 'nav-link active' : 'nav-link';
     };

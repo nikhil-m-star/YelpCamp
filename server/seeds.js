@@ -4,8 +4,10 @@ const User = require('./Models/user');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
+// Connect to Database for Seeding
 mongoose.connect(process.env.dbUrl || 'mongodb://localhost:27017/yelp-camp');
 
+// Sample Data for Campgrounds
 const seedData = [
     {
         title: 'Sunset Ridge Camp',
@@ -13,8 +15,10 @@ const seedData = [
         description: 'A stunning campsite perched on a ridge with panoramic sunset views. Wake up above the clouds and fall asleep under a canopy of stars. The site features level tent pads and fire rings.',
         location: 'Asheville, North Carolina',
         geometry: { type: 'Point', coordinates: [-82.5515, 35.5951] },
+        // Unsplash Source Image
         image: [{ url: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800', filename: 'camp1' }]
     },
+    // ... (other items usually remain the same, mostly data)
     {
         title: 'Whispering Pines Retreat',
         price: 28,
@@ -81,6 +85,8 @@ const seedData = [
     }
 ];
 
+// Main Seeding Function
+// Wipes the DB and inserts sample data with a default 'admin' user
 async function seedDB() {
     try {
         // Create a dummy user to be the author

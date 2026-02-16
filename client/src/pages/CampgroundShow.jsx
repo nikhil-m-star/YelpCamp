@@ -9,8 +9,10 @@ import 'leaflet/dist/leaflet.css';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+// ... imports ...
 import API from '../api';
 
+// Fix for Leaflet default marker icons in React
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: markerIcon2x,
@@ -18,6 +20,7 @@ L.Icon.Default.mergeOptions({
     shadowUrl: markerShadow,
 });
 
+// Interactive Star Rating Component
 function StarRating({ value, onChange }) {
     const [hover, setHover] = useState(0);
     const labels = ['', 'Terrible', 'Bad', 'Average', 'Good', 'Excellent'];
@@ -43,21 +46,29 @@ function StarRating({ value, onChange }) {
 export default function CampgroundShow() {
     const { id } = useParams();
     const [campground, setCampground] = useState(null);
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(0); // Carousel state
     const [rating, setRating] = useState(3);
+
+    // Auth Hooks: Support both Local and Clerk (via Adapter)
     const { user: localUser, token: localToken } = useContext(AuthContext);
     const { user: clerkUser } = useUser();
     const { getToken } = useAuth();
     const navigate = useNavigate();
 
+    // Fetch Campground Details
     useEffect(() => {
         const fetchCamp = async () => {
-            const res = await axios.get(`${API}/api/campgrounds/${id}`);
-            setCampground(res.data);
+            try {
+                const res = await axios.get(`${API}/api/campgrounds/${id}`);
+                setCampground(res.data);
+            } catch (e) {
+                console.error("Error loading campground", e);
+            }
         };
         fetchCamp();
     }, [id]);
 
+    // Helper to get the correct token for API requests
     const getAuthToken = async () => {
         if (localToken) return localToken;
         return await getToken();

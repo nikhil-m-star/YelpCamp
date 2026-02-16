@@ -14,28 +14,37 @@ export default function CampgroundNew() {
     const { getToken } = useAuth();
     const navigate = useNavigate();
 
+    // Handle Form Submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Use FormData for file uploads (multipart/form-data)
         const formData = new FormData();
         formData.append('campground[title]', title);
         formData.append('campground[location]', location);
         formData.append('campground[price]', price);
         formData.append('campground[description]', description);
 
+        // Append multiple images
         const files = e.target.image.files;
         for (let i = 0; i < files.length; i++) {
             formData.append('image', files[i]);
         }
 
+        // Get Auth Token
         let token = localToken;
         if (!token) {
             token = await getToken();
         }
 
-        const res = await axios.post(`${API}/api/campgrounds`, formData, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        navigate(`/campgrounds/${res.data._id}`);
+        try {
+            const res = await axios.post(`${API}/api/campgrounds`, formData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            navigate(`/campgrounds/${res.data._id}`);
+        } catch (error) {
+            console.error("Error creating campground", error);
+        }
     };
 
     return (

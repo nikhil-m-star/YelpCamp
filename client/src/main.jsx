@@ -5,7 +5,8 @@ import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import { ClerkProvider } from '@clerk/clerk-react'
 
-// const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+// Clerk Configuration
+// The Publishable Key is required for frontend integration
 const PUBLISHABLE_KEY = "pk_test_c3Rhci1nb3BoZXItODUuY2xlcmsuYWNjb3VudHMuZGV2JA";
 
 if (!PUBLISHABLE_KEY) {
@@ -14,6 +15,8 @@ if (!PUBLISHABLE_KEY) {
 
 import { Component } from 'react';
 
+// Error Boundary Component
+// Catches JavaScript errors anywhere in the child component tree
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
@@ -42,6 +45,8 @@ class ErrorBoundary extends Component {
   }
 }
 
+// React Entry Point
+// Wraps the App with strict mode, error handling, and auth providers (Clerk + Custom Auth)
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary>

@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useUser } from '@clerk/clerk-react';
 
 export default function Home() {
+    // Check both Local and Clerk auth states to determine "Logged In" status
     const { user: localUser } = useContext(AuthContext);
     const { isSignedIn, isLoaded } = useUser();
     const isLoggedIn = !!localUser || (isLoaded && isSignedIn);
@@ -19,6 +20,7 @@ export default function Home() {
                     Curated campgrounds for the discerning traveler. <br />
                     Experience the wild in unparalleled comfort.
                 </p>
+                {/* Conditional Buttons based on Auth Status */}
                 <div className="hero-buttons">
                     <Link to="/campgrounds" className="btn btn-primary">
                         Explore Collection

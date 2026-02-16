@@ -8,20 +8,24 @@ import API from '../api';
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    // Auth State Hooks
     const { login, user: localUser } = useContext(AuthContext);
     const { isSignedIn, isLoaded } = useUser();
     const navigate = useNavigate();
 
+    // Redirect if already logged in (Local or Clerk)
     useEffect(() => {
         if (localUser || (isLoaded && isSignedIn)) {
             navigate('/');
         }
     }, [localUser, isSignedIn, isLoaded, navigate]);
 
+    // Handle Local Login Submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const res = await axios.post(`${API}/api/login`, { username, password });
+            // Save token/user to context & localStorage
             login(res.data.token, res.data.user);
             navigate('/');
         } catch (e) {

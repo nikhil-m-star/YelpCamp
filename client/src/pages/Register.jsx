@@ -9,20 +9,24 @@ export default function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    // Auth Hooks
     const { login, user: localUser } = useContext(AuthContext);
     const { isSignedIn, isLoaded } = useUser();
     const navigate = useNavigate();
 
+    // Redirect if already authenticated
     useEffect(() => {
         if (localUser || (isLoaded && isSignedIn)) {
             navigate('/');
         }
     }, [localUser, isSignedIn, isLoaded, navigate]);
 
+    // Handle Local Registration
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const res = await axios.post(`${API}/api/register`, { username, email, password });
+            // Automatically login after registration
             login(res.data.token, res.data.user);
             navigate('/');
         } catch (e) {

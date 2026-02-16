@@ -13,15 +13,21 @@ export default function CampgroundEdit() {
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
 
+    // Fetch existing data to pre-fill the form
     useEffect(() => {
         const fetchCamp = async () => {
-            const res = await axios.get(`${API}/api/campgrounds/${id}`);
-            setTitle(res.data.title);
-            setLocation(res.data.location);
+            try {
+                const res = await axios.get(`${API}/api/campgrounds/${id}`);
+                setTitle(res.data.title);
+                setLocation(res.data.location);
+            } catch (e) {
+                console.error("Error fetching campground for edit", e);
+            }
         }
         fetchCamp();
     }, [id]);
 
+    // Handle Update Submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         let token = localToken;
@@ -29,10 +35,15 @@ export default function CampgroundEdit() {
             token = await getToken();
         }
         const updatedCamp = { campground: { title, location } };
-        await axios.put(`${API}/api/campgrounds/${id}`, updatedCamp, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        navigate(`/campgrounds/${id}`);
+
+        try {
+            await axios.put(`${API}/api/campgrounds/${id}`, updatedCamp, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            navigate(`/campgrounds/${id}`);
+        } catch (e) {
+            console.error("Update failed", e);
+        }
     }
 
     return (

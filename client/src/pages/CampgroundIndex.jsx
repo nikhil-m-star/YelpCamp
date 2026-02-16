@@ -6,10 +6,15 @@ import API from '../api';
 export default function CampgroundIndex() {
     const [campgrounds, setCampgrounds] = useState([]);
 
+    // Fetch all campgrounds on component mount
     useEffect(() => {
         const fetchCampgrounds = async () => {
-            const res = await axios.get(`${API}/api/campgrounds`);
-            setCampgrounds(res.data);
+            try {
+                const res = await axios.get(`${API}/api/campgrounds`);
+                setCampgrounds(res.data);
+            } catch (error) {
+                console.error("Error fetching campgrounds:", error);
+            }
         };
         fetchCampgrounds();
     }, []);
@@ -20,6 +25,7 @@ export default function CampgroundIndex() {
                 <h1 className="page-title">All Campgrounds</h1>
                 <p className="page-subtitle">Discover your next outdoor adventure</p>
             </div>
+            {/* Grid Layout for Campgrounds */}
             <div className="campground-grid">
                 {campgrounds.map(camp => (
                     <Link to={`/campgrounds/${camp._id}`} key={camp._id} className="campground-card">
