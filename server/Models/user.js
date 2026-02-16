@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// Schema for User data
 const userSchema = new Schema({
     email: {
         type: String,
@@ -12,10 +13,12 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
+    // Password is only required for local auth, not for Clerk users (if integrated later)
     password: {
         type: String,
-        required: false // Password is not required for Clerk users
+        required: false
     },
+    // CLERK ID for third-party auth integration
     clerkId: {
         type: String,
         unique: true,

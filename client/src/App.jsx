@@ -8,13 +8,18 @@ import CampgroundEdit from './pages/CampgroundEdit';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
+// Main Client Application Component
+// Handles routing for the YelpCamp frontend
 function App() {
   return (
     <Router>
       <div>
         <Navbar />
         <Routes>
+          {/* Public Home Route */}
           <Route path="/" element={<Home />} />
+
+          {/* Campground Routes */}
           <Route path="/campgrounds" element={
             <main className="page-wrapper container">
               <CampgroundIndex />
@@ -35,6 +40,8 @@ function App() {
               <CampgroundShow />
             </main>
           } />
+
+          {/* Auth Routes */}
           <Route path="/login" element={
             <main className="page-wrapper">
               <Login />

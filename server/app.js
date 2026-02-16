@@ -1,21 +1,29 @@
+// Express & Middleware
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const methodOverride = require('method-override');
+
+// Models & Auth
 const Review = require('./Models/review');
 const User = require('./Models/user');
+const Campground = require("./Models/campground");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { isLoggedIn } = require('./middleware');
+
+// Geocoding & Maps
 const NodeGeocoder = require('node-geocoder');
 const geocoder = NodeGeocoder({ provider: 'openstreetmap' });
 
 require('dotenv').config();
 
+// Image Upload Configuration (Multer + Cloudinary)
 const multer = require('multer');
 const { storage } = require('./cloudinary');
 const upload = multer({ storage });
 
-// CORS — allow frontend origin
+// CORS Configuration — allow frontend origin
 const allowedOrigins = [
     'http://localhost:5173',
     process.env.FRONTEND_URL
@@ -32,16 +40,13 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Parsing Middleware
+app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(methodOverride('_method')); // Allow PUT/DELETE via POST query param
 
+// Database Connection
 const mongoose = require("mongoose");
-const Campground = require("./Models/campground");
-const methodOverride = require('method-override');
-
-app.use(methodOverride('_method'));
-
-// Database connection
 const dbUrl = process.env.dbUrl || 'mongodb://localhost:27017/yelp-camp';
 mongoose.connect(dbUrl);
 const db = mongoose.connection;
@@ -53,6 +58,8 @@ db.once("open", () => {
 // ========================
 // AUTH ROUTES
 // ========================
+
+// Register a new user
 app.post('/api/register', async (req, res) => {
     try {
         const { email, username, password } = req.body;
@@ -67,6 +74,7 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
+// Login user
 app.post('/api/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -85,22 +93,27 @@ app.post('/api/login', async (req, res) => {
 // ========================
 // CAMPGROUND ROUTES
 // ========================
+
 app.get("/api", (req, res) => {
     res.json({ message: "Welcome to the YelpCamp API" });
 });
 
+// Get all campgrounds
 app.get('/api/campgrounds', async (req, res) => {
     const campgrounds = await Campground.find({});
     res.json(campgrounds);
 });
 
+// Create new campground (Requires Auth)
 app.post('/api/campgrounds', isLoggedIn, upload.array('image'), async (req, res) => {
+    // Geocode the location
     const geoResponse = await geocoder.geocode(req.body.campground.location);
     const campground = new Campground(req.body.campground);
     campground.geometry = {
         type: 'Point',
         coordinates: [geoResponse[0].longitude, geoResponse[0].latitude]
     };
+    // Map uploaded files to schema format
     campground.image = req.files.map(file => ({
         url: file.path,
         filename: file.filename
@@ -110,6 +123,7 @@ app.post('/api/campgrounds', isLoggedIn, upload.array('image'), async (req, res)
     res.json(campground);
 });
 
+// Get campground details (Populates reviews and authors)
 app.get('/api/campgrounds/:id', async (req, res) => {
     const campground = await Campground.findById(req.params.id)
         .populate({
@@ -122,11 +136,13 @@ app.get('/api/campgrounds/:id', async (req, res) => {
     res.json(campground);
 });
 
+// Get data for edit form
 app.get('/api/campgrounds/:id/edit', async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     res.json(campground);
 });
 
+// Update campground (Requires Auth)
 app.put('/api/campgrounds/:id', isLoggedIn, async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, {
@@ -135,6 +151,7 @@ app.put('/api/campgrounds/:id', isLoggedIn, async (req, res) => {
     res.json(campground);
 });
 
+// Delete campground (Requires Auth)
 app.delete('/api/campgrounds/:id', isLoggedIn, async (req, res) => {
     const id = req.params.id;
     await Campground.findByIdAndDelete(id);
@@ -144,6 +161,8 @@ app.delete('/api/campgrounds/:id', isLoggedIn, async (req, res) => {
 // ========================
 // REVIEW ROUTES
 // ========================
+
+// Add a review to a campground
 app.post('/api/campgrounds/:id/reviews', isLoggedIn, async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
@@ -154,6 +173,7 @@ app.post('/api/campgrounds/:id/reviews', isLoggedIn, async (req, res) => {
     res.json(campground);
 });
 
+// Delete a review
 app.delete('/api/campgrounds/:id/reviews/:reviewId', isLoggedIn, async (req, res) => {
     const { id, reviewId } = req.params;
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
